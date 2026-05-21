@@ -42,6 +42,7 @@ const questionGroups = [
     icon: Footprints,
     color: "from-cyan-300 to-blue-500",
     accent: "bg-cyan-100",
+    parameters: ["足長サイズ", "足幅", "甲周り", "踵ホールド", "足ズレ"],
     questions: [
       "足長サイズは適切でしたか？",
       "足幅のフィット感はどうでしたか？",
@@ -60,6 +61,7 @@ const questionGroups = [
     icon: Smile,
     color: "from-lime-300 to-green-500",
     accent: "bg-lime-100",
+    parameters: ["柔らかさ", "反発感", "衝撃吸収", "疲労軽減", "前足部クッション"],
     questions: [
       "着地時の柔らかさはどう感じましたか？",
       "反発感は十分に感じられましたか？",
@@ -76,6 +78,7 @@ const questionGroups = [
     icon: Gauge,
     color: "from-orange-300 to-red-500",
     accent: "bg-orange-100",
+    parameters: ["横ブレ", "着地安定感", "足首サポート", "コーナリング", "ミッドソール剛性"],
     questions: [
       "横ブレは感じましたか？",
       "着地時の安定感はどうでしたか？",
@@ -92,6 +95,7 @@ const questionGroups = [
     icon: Zap,
     color: "from-yellow-300 to-amber-500",
     accent: "bg-yellow-100",
+    parameters: ["手持ち重量感", "歩行時重量感", "長時間負担", "動きやすさ"],
     questions: [
       "持った時に軽さを感じましたか？",
       "歩行時に重さは気になりましたか？",
@@ -106,6 +110,7 @@ const questionGroups = [
     icon: Wind,
     color: "from-sky-300 to-indigo-500",
     accent: "bg-sky-100",
+    parameters: ["ムレにくさ", "通気感", "夏場適性", "素材快適性"],
     questions: [
       "ムレ感はありましたか？",
       "通気性は十分に感じましたか？",
@@ -120,6 +125,7 @@ const questionGroups = [
     icon: RotateCcw,
     color: "from-violet-300 to-purple-500",
     accent: "bg-violet-100",
+    parameters: ["曲がりやすさ", "前足部屈曲", "動作時の硬さ", "重心移動"],
     questions: [
       "歩行時の曲がりやすさはどうでしたか？",
       "前足部の屈曲は自然でしたか？",
@@ -134,6 +140,7 @@ const questionGroups = [
     icon: Shield,
     color: "from-emerald-300 to-teal-500",
     accent: "bg-emerald-100",
+    parameters: ["滑りにくさ", "濡れ路面", "急停止", "接地感"],
     questions: [
       "滑りやすさは感じましたか？",
       "濡れた路面での安心感はありましたか？",
@@ -148,6 +155,7 @@ const questionGroups = [
     icon: Shield,
     color: "from-slate-300 to-slate-600",
     accent: "bg-slate-100",
+    parameters: ["素材強度", "摩耗耐性", "長期使用感", "アッパー強度"],
     questions: [
       "素材の耐久性に不安はありましたか？",
       "摩耗しやすそうな箇所はありましたか？",
@@ -162,6 +170,7 @@ const questionGroups = [
     icon: Plus,
     color: "from-pink-300 to-rose-500",
     accent: "bg-pink-100",
+    parameters: ["履きやすさ", "脱ぎやすさ", "開口部", "着脱ストレス"],
     questions: [
       "履きやすさはどうでしたか？",
       "脱ぎやすさはどうでしたか？",
@@ -176,6 +185,7 @@ const questionGroups = [
     icon: Star,
     color: "from-fuchsia-300 to-pink-500",
     accent: "bg-fuchsia-100",
+    parameters: ["第一印象", "シルエット", "高級感", "ブランドらしさ", "購入意欲"],
     questions: [
       "全体デザインの印象はどうでしたか？",
       "シルエットは魅力的に感じましたか？",
@@ -192,6 +202,7 @@ const questionGroups = [
     icon: Palette,
     color: "from-rose-300 via-orange-300 to-yellow-400",
     accent: "bg-rose-100",
+    parameters: ["配色印象", "配色バランス", "合わせやすさ", "高級感", "店頭映え"],
     questions: [
       "カラーリングの印象はどうでしたか？",
       "配色バランスは良いと感じましたか？",
@@ -207,6 +218,7 @@ const questionGroups = [
     icon: ClipboardList,
     color: "from-blue-300 to-cyan-500",
     accent: "bg-blue-100",
+    parameters: ["日常使用", "スポーツ適性", "通勤通学", "汎用性"],
     questions: [
       "日常使いしやすそうですか？",
       "スポーツ用途に適していると感じますか？",
@@ -220,6 +232,7 @@ const questionGroups = [
     icon: Sparkles,
     color: "from-indigo-300 to-violet-500",
     accent: "bg-indigo-100",
+    parameters: ["総合満足度", "購入意向", "推奨意向", "改善優先度"],
     questions: [
       "総合的な満足度を教えてください。",
       "購入したいと思いましたか？",
@@ -260,6 +273,11 @@ export default function PopShoesHearingSheetMaker() {
     selectedGroups.reduce((sum, group) => sum + getSelectedQuestions(group).length, 0) +
     customQuestions.length;
 
+  const parameterCount = selectedGroups.reduce(
+    (sum, group) => sum + group.parameters.length,
+    0
+  );
+
   const exportPDF = () => {
     const doc = new jsPDF();
     let y = 20;
@@ -278,31 +296,56 @@ export default function PopShoesHearingSheetMaker() {
 
     selectedGroups.forEach((group) => {
       const questions = getSelectedQuestions(group);
-      if (questions.length === 0) return;
+      if (questions.length === 0 && group.parameters.length === 0) return;
 
-      if (y > 260) {
+      if (y > 250) {
         doc.addPage();
         y = 20;
       }
 
       doc.setFontSize(14);
       doc.text(group.label, 20, y);
-      y += 10;
+      y += 9;
 
-      questions.forEach((q, index) => {
-        if (y > 270) {
-          doc.addPage();
-          y = 20;
-        }
-
+      if (group.parameters.length > 0) {
         doc.setFontSize(10);
-        doc.text(`${index + 1}. ${q}`, 20, y);
-        y += 7;
-        doc.line(20, y, 180, y);
+        doc.text("Rating Parameters (1: Poor / 5: Excellent)", 20, y);
         y += 8;
-      });
 
-      y += 5;
+        group.parameters.forEach((parameter) => {
+          if (y > 270) {
+            doc.addPage();
+            y = 20;
+          }
+
+          doc.setFontSize(9);
+          doc.text(`${parameter}:   1    2    3    4    5`, 24, y);
+          y += 7;
+        });
+
+        y += 5;
+      }
+
+      if (questions.length > 0) {
+        doc.setFontSize(10);
+        doc.text("Questions", 20, y);
+        y += 8;
+
+        questions.forEach((q, index) => {
+          if (y > 270) {
+            doc.addPage();
+            y = 20;
+          }
+
+          doc.setFontSize(10);
+          doc.text(`${index + 1}. ${q}`, 24, y);
+          y += 7;
+          doc.line(24, y, 185, y);
+          y += 8;
+        });
+
+        y += 5;
+      }
     });
 
     customQuestions.forEach((q, index) => {
@@ -378,11 +421,21 @@ export default function PopShoesHearingSheetMaker() {
 
     selectedGroups.forEach((group) => {
       const questions = getSelectedQuestions(group);
-      if (questions.length === 0) return;
+      if (questions.length === 0 && group.parameters.length === 0) return;
 
       lines.push(`■ ${group.title}`);
-      questions.forEach((q, index) => lines.push(`${index + 1}. ${q}`));
-      lines.push("");
+
+      if (group.parameters.length > 0) {
+        lines.push("[評価パラメーター]");
+        group.parameters.forEach((parameter) => lines.push(`${parameter}: 1 2 3 4 5`));
+        lines.push("");
+      }
+
+      if (questions.length > 0) {
+        lines.push("[質問]");
+        questions.forEach((q, index) => lines.push(`${index + 1}. ${q}`));
+        lines.push("");
+      }
     });
 
     if (customQuestions.length > 0) {
@@ -410,7 +463,7 @@ export default function PopShoesHearingSheetMaker() {
                 HEARING SHEET MAKER
               </h1>
               <p className="mt-2 text-base font-semibold text-slate-600 md:text-lg">
-                今日のサンプル、どこを深掘りする？評価軸と質問を選んでシートを生成！
+                評価軸・質問・評価パラメーターを選んでシートを生成！
               </p>
             </div>
             <motion.div
@@ -531,6 +584,9 @@ export default function PopShoesHearingSheetMaker() {
                         <div className="mt-2 rounded-full bg-white/75 px-2 py-1 text-xs font-black">
                           {selectedQuestionCount}/{group.questions.length} Questions
                         </div>
+                        <div className="mt-1 rounded-full bg-white/75 px-2 py-1 text-xs font-black">
+                          {group.parameters.length} Parameters
+                        </div>
                       </motion.button>
                     );
                   })}
@@ -546,7 +602,7 @@ export default function PopShoesHearingSheetMaker() {
                   <div>
                     <h2 className="text-2xl font-black">Live Preview</h2>
                     <p className="font-bold text-slate-500">
-                      評価軸の中の質問もクリックでON/OFFできます。
+                      質問をクリックでON/OFF。評価パラメーターもPDFに入ります。
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -582,6 +638,9 @@ export default function PopShoesHearingSheetMaker() {
                     <span className="rounded-full bg-white px-3 py-1">
                       Total: {questionCount}問
                     </span>
+                    <span className="rounded-full bg-white px-3 py-1">
+                      Parameters: {parameterCount}
+                    </span>
                   </div>
                 </div>
 
@@ -613,7 +672,7 @@ export default function PopShoesHearingSheetMaker() {
                       className="mb-5 rounded-3xl border-4 border-slate-900 bg-lime-200 p-4 text-center shadow-[4px_4px_0_#111827]"
                     >
                       <div className="text-2xl font-black">
-                        🎉 Generated! {questionCount}問のシートができました
+                        🎉 Generated! {questionCount}問・{parameterCount}評価項目のシートができました
                       </div>
                     </motion.div>
                   )}
@@ -662,6 +721,22 @@ export default function PopShoesHearingSheetMaker() {
                               >
                                 All OFF
                               </button>
+                            </div>
+                          </div>
+
+                          <div className="mb-3 grid gap-2 rounded-2xl bg-slate-50 p-3">
+                            <div className="text-sm font-black text-slate-500">
+                              評価パラメーター（5段階）
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                              {group.parameters.map((parameter) => (
+                                <span
+                                  key={parameter}
+                                  className="rounded-full border-2 border-slate-900 bg-white px-3 py-1 text-xs font-black"
+                                >
+                                  {parameter}
+                                </span>
+                              ))}
                             </div>
                           </div>
 
