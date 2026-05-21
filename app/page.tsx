@@ -222,7 +222,7 @@ export default function PopShoesHearingSheetMaker() {
   const [selected, setSelected] = useState(["fit", "cushion", "design", "color", "overall"]);
   const [generated, setGenerated] = useState(false);
   const [customQuestion, setCustomQuestion] = useState("");
-  const [customQuestions, setCustomQuestions] = useState([]);
+  const [customQuestions, setCustomQuestions] = useState<string[]>([]);
 
   const selectedGroups = useMemo(
     () => questionGroups.filter((group) => selected.includes(group.id)),
@@ -289,7 +289,7 @@ const exportPDF = () => {
     );
   };
 
-  const toggleUser = (user) => {
+  const toggleUser = (user: string) => {
     setTargetUsers((prev) =>
       prev.includes(user) ? prev.filter((item) => item !== user) : [...prev, user]
     );
