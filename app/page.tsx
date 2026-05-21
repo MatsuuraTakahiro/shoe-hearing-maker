@@ -333,7 +333,12 @@ const users = [
   },
 ];
 
+const APP_PASSWORD = "shoelab2025";
+
 export default function PopShoesHearingSheetMaker() {
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [passwordInput, setPasswordInput] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [modelName, setModelName] = useState("New Item");
   const [category, setCategory] = useState("Tennis");
   const [targetUsers, setTargetUsers] = useState(["Beginner", "General User"]);
@@ -468,6 +473,16 @@ const exportPDF = () => {
     setGenerated(false);
   };
 
+  const handlePasswordSubmit = () => {
+    if (passwordInput === APP_PASSWORD) {
+      setIsUnlocked(true);
+      setPasswordError("");
+      return;
+    }
+
+    setPasswordError("Password is incorrect.");
+  };
+
   const exportText = () => {
     const lines = [];
     lines.push(`ヒアリングシート：${modelName || "未入力サンプル"}`);
@@ -485,6 +500,65 @@ const exportPDF = () => {
     }
     navigator.clipboard?.writeText(lines.join("\n"));
   };
+
+  if (!isUnlocked) {
+    return (
+      <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,#dff7ff,transparent_30%),radial-gradient(circle_at_top_right,#ffe0f8,transparent_26%),linear-gradient(135deg,#f7fbff,#fff7e8)] p-4 text-slate-900 md:p-8">
+        <div className="mx-auto flex min-h-[80vh] max-w-xl items-center justify-center">
+          <motion.div
+            initial={{ opacity: 0, y: 16, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            className="w-full rounded-[2rem] border-4 border-slate-900 bg-white p-6 shadow-[8px_8px_0_#111827]"
+          >
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-lime-300 px-4 py-1 text-sm font-black tracking-wide text-slate-900">
+              <Sparkles size={16} /> SNEAKER LAB TOOL
+            </div>
+
+            <h1 className="text-3xl font-black tracking-tight md:text-4xl">
+              HEARING SHEET MAKER
+            </h1>
+
+            <p className="mt-2 font-bold text-slate-500">
+              Please enter the password to open this tool.
+            </p>
+
+            <div className="mt-6">
+              <label className="mb-2 block text-sm font-black">Password</label>
+              <input
+                type="password"
+                value={passwordInput}
+                onChange={(e) => {
+                  setPasswordInput(e.target.value);
+                  setPasswordError("");
+                }}
+                onKeyDown={(e) => e.key === "Enter" && handlePasswordSubmit()}
+                className="w-full rounded-2xl border-4 border-slate-900 bg-slate-50 px-4 py-3 font-bold outline-none transition focus:bg-white focus:ring-4 focus:ring-cyan-200"
+                placeholder="Enter password"
+                autoFocus
+              />
+
+              {passwordError && (
+                <p className="mt-3 rounded-2xl bg-pink-100 px-4 py-3 text-sm font-black text-pink-700">
+                  {passwordError}
+                </p>
+              )}
+
+              <button
+                onClick={handlePasswordSubmit}
+                className="mt-5 w-full rounded-full border-4 border-slate-900 bg-cyan-300 px-5 py-4 text-base font-black text-slate-900 shadow-[4px_4px_0_#111827] transition hover:bg-cyan-200"
+              >
+                Open App
+              </button>
+            </div>
+
+            <p className="mt-5 text-xs font-bold text-slate-400">
+              This is a simple app-level password screen.
+            </p>
+          </motion.div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,#dff7ff,transparent_30%),radial-gradient(circle_at_top_right,#ffe0f8,transparent_26%),linear-gradient(135deg,#f7fbff,#fff7e8)] p-4 text-slate-900 md:p-8">
