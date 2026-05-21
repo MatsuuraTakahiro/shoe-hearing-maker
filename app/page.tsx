@@ -469,7 +469,7 @@ const exportPDF = () => {
                   value={modelName}
                   onChange={(e) => setModelName(e.target.value)}
                   className="mb-4 w-full rounded-2xl border-3 border-slate-900 bg-slate-50 px-4 py-3 font-bold outline-none transition focus:bg-white focus:ring-4 focus:ring-cyan-200"
-                  placeholder="例：Cloud Runner Proto 01"
+                  placeholder="例：New Item"
                 />
 
                 <label className="mb-2 block text-sm font-black">カテゴリ</label>
