@@ -310,13 +310,31 @@ export default function PopShoesHearingSheetMaker() {
   const [generated, setGenerated] = useState(false);
   const [customQuestion, setCustomQuestion] = useState("");
   const [customQuestions, setCustomQuestions] = useState<string[]>([]);
+  const [excludedQuestions, setExcludedQuestions] = useState<string[]>([]);
 
   const selectedGroups = useMemo(
     () => questionGroups.filter((group) => selected.includes(group.id)),
     [selected]
   );
 
-  const questionCount = selectedGroups.reduce((sum, group) => sum + group.questions.length, 0) + customQuestions.length;
+  const getQuestionId = (groupId: string, index: number) =>
+    `${groupId}-${index}`;
+
+  const isQuestionSelected = (groupId: string, index: number) => {
+    return !excludedQuestions.includes(getQuestionId(groupId, index));
+  };
+
+  const getSelectedQuestions = (group: any) => {
+    return group.questions.filter((_: any, index: number) =>
+      isQuestionSelected(group.id, index)
+    );
+  };
+
+  const questionCount =
+    selectedGroups.reduce(
+      (sum, group) => sum + getSelectedQuestions(group).length,
+      0
+    ) + customQuestions.length;
 const exportPDF = () => {
   const doc = new jsPDF();
   let y = 20;
@@ -344,6 +362,8 @@ const exportPDF = () => {
     y += 10;
 
     group.pdfQuestions.forEach((q, index) => {
+      if (!isQuestionSelected(group.id, index)) return;
+
       if (y > 270) {
         doc.addPage();
         y = 20;
@@ -384,6 +404,17 @@ const exportPDF = () => {
     );
   };
 
+  const toggleQuestion = (groupId: string, index: number) => {
+    const questionId = getQuestionId(groupId, index);
+
+    setGenerated(false);
+    setExcludedQuestions((prev) =>
+      prev.includes(questionId)
+        ? prev.filter((id) => id !== questionId)
+        : [...prev, questionId]
+    );
+  };
+
   const toggleUser = (user: string) => {
     setTargetUsers((prev) =>
       prev.includes(user) ? prev.filter((item) => item !== user) : [...prev, user]
@@ -399,6 +430,7 @@ const exportPDF = () => {
 
   const reset = () => {
     setSelected([]);
+    setExcludedQuestions([]);
     setCustomQuestions([]);
     setGenerated(false);
   };
@@ -411,7 +443,7 @@ const exportPDF = () => {
     lines.push("");
     selectedGroups.forEach((group) => {
       lines.push(`■ ${group.title}`);
-      group.questions.forEach((q, index) => lines.push(`${index + 1}. ${q}`));
+      getSelectedQuestions(group).forEach((q: string, index: number) => lines.push(`${index + 1}. ${q}`));
       lines.push("");
     });
     if (customQuestions.length > 0) {
@@ -549,7 +581,7 @@ const exportPDF = () => {
                         <div className="text-lg font-black">{group.title}</div>
                         <div className="text-xs font-black uppercase tracking-wide opacity-80">{group.label}</div>
                         <div className="mt-2 rounded-full bg-white/75 px-2 py-1 text-xs font-black">
-                          {group.questions.length} Questions
+                          {getSelectedQuestions(group).length}/{group.questions.length} Questions
                         </div>
                       </motion.button>
                     );
@@ -565,7 +597,7 @@ const exportPDF = () => {
                 <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                   <div>
                     <h2 className="text-2xl font-black">Live Preview</h2>
-                    <p className="font-bold text-slate-500">選択した評価軸だけが質問シートに入ります。</p>
+                    <p className="font-bold text-slate-500">質問をクリックするとON/OFFできます。PDFにも反映されます。</p>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     <Button
@@ -651,14 +683,30 @@ const exportPDF = () => {
                             <Icon size={20} /> {group.title}
                           </div>
                           <ol className="space-y-2">
-                            {group.questions.map((question, index) => (
-                              <li key={question} className="rounded-2xl bg-slate-50 p-3 font-bold leading-relaxed">
-                                <span className="mr-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-900 text-xs text-white">
-                                  {index + 1}
-                                </span>
-                                {question}
-                              </li>
-                            ))}
+                            {group.questions.map((question, index) => {
+                              const isSelected = isQuestionSelected(group.id, index);
+
+                              return (
+                                <li
+                                  key={question}
+                                  onClick={() => toggleQuestion(group.id, index)}
+                                  className={`cursor-pointer rounded-2xl p-3 font-bold leading-relaxed transition ${
+                                    isSelected
+                                      ? "bg-slate-50 hover:bg-cyan-50"
+                                      : "bg-slate-200 line-through opacity-40 hover:opacity-70"
+                                  }`}
+                                >
+                                  <span
+                                    className={`mr-2 inline-flex h-6 w-6 items-center justify-center rounded-full text-xs text-white ${
+                                      isSelected ? "bg-slate-900" : "bg-slate-400"
+                                    }`}
+                                  >
+                                    {isSelected ? "✓" : "−"}
+                                  </span>
+                                  {question}
+                                </li>
+                              );
+                            })}
                           </ol>
                         </motion.div>
                       );
