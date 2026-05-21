@@ -299,13 +299,44 @@ const questionGroups = [
   },
 ];
 
-const categories = ["Running", "Lifestyle", "Kids", "Work", "Training", "Outdoor"];
-const users = ["初級者", "中級者", "上級者", "社内評価者", "一般ユーザー"];
+const categories = [
+  "Tennis",
+  "Padel",
+  "Pickleball",
+  "Volleyball",
+  "Handball",
+  "Badminton",
+  "Basketball",
+  "Wrestling",
+  "Netball",
+];
+const users = [
+  {
+    label: "初級者 / Beginner",
+    pdf: "Beginner",
+  },
+  {
+    label: "中級者 / Intermediate",
+    pdf: "Intermediate",
+  },
+  {
+    label: "上級者 / Advanced",
+    pdf: "Advanced",
+  },
+  {
+    label: "社内評価者 / Internal Tester",
+    pdf: "Internal Tester",
+  },
+  {
+    label: "一般ユーザー / General User",
+    pdf: "General User",
+  },
+];
 
 export default function PopShoesHearingSheetMaker() {
   const [modelName, setModelName] = useState("New Item");
-  const [category, setCategory] = useState("Running");
-  const [targetUsers, setTargetUsers] = useState(["初級者", "一般ユーザー"]);
+  const [category, setCategory] = useState("Tennis");
+  const [targetUsers, setTargetUsers] = useState(["Beginner", "General User"]);
   const [selected, setSelected] = useState(["fit", "cushion", "design", "color", "overall"]);
   const [generated, setGenerated] = useState(false);
   const [customQuestion, setCustomQuestion] = useState("");
@@ -415,9 +446,11 @@ const exportPDF = () => {
     );
   };
 
-  const toggleUser = (user: string) => {
+  const toggleUser = (user: { label: string; pdf: string }) => {
     setTargetUsers((prev) =>
-      prev.includes(user) ? prev.filter((item) => item !== user) : [...prev, user]
+      prev.includes(user.pdf)
+        ? prev.filter((item) => item !== user.pdf)
+        : [...prev, user.pdf]
     );
   };
 
@@ -525,15 +558,16 @@ const exportPDF = () => {
                 <div className="flex flex-wrap gap-2">
                   {users.map((user) => (
                     <button
-                      key={user}
+                      key={user.pdf}
                       onClick={() => toggleUser(user)}
                       className={`rounded-full border-3 border-slate-900 px-3 py-2 text-sm font-black transition ${
-                        targetUsers.includes(user)
+                        targetUsers.includes(user.pdf)
                           ? "bg-pink-300 shadow-[3px_3px_0_#111827]"
                           : "bg-white hover:bg-slate-100"
                       }`}
                     >
-                      {targetUsers.includes(user) ? "✓ " : ""}{user}
+                      {targetUsers.includes(user.pdf) ? "✓ " : ""}
+                      {user.label}
                     </button>
                   ))}
                 </div>
