@@ -333,7 +333,7 @@ const users = [
   },
 ];
 
-const APP_PASSWORD = "shoelab2025";
+const APP_PASSWORD = "CPS2026";
 
 export default function PopShoesHearingSheetMaker() {
   const [isUnlocked, setIsUnlocked] = useState(false);
