@@ -20,6 +20,17 @@ import {
   Smile,
 } from "lucide-react";
 
+type QuestionGroup = {
+  id: string;
+  title: string;
+  label: string;
+  icon: React.ComponentType<{ size?: number; className?: string }>;
+  color: string;
+  accent: string;
+  parameters: string[];
+  questions: string[];
+};
+
 const Card = ({ children, className = "" }: any) => (
   <div className={className}>{children}</div>
 );
@@ -34,220 +45,220 @@ const Button = ({ children, className = "", ...props }: any) => (
   </button>
 );
 
-const questionGroups = [
+const questionGroups: QuestionGroup[] = [
   {
     id: "fit",
-    title: "フィット感",
+    title: "Fit",
     label: "Fit",
     icon: Footprints,
     color: "from-cyan-300 to-blue-500",
     accent: "bg-cyan-100",
-    parameters: ["足長サイズ", "足幅", "甲周り", "踵ホールド", "足ズレ"],
+    parameters: ["Length Fit", "Width Fit", "Instep Pressure", "Heel Hold", "Foot Slide"],
     questions: [
-      "足長サイズは適切でしたか？",
-      "足幅のフィット感はどうでしたか？",
-      "甲周りの圧迫感はありましたか？",
-      "踵のホールド感は十分でしたか？",
-      "歩行時に足ズレはありましたか？",
-      "つま先の余裕は適切でしたか？",
-      "長時間履いても窮屈感はありませんでしたか？",
-      "シューレース調整はしやすかったですか？",
+      "Was the shoe length appropriate?",
+      "How was the width fit?",
+      "Was there any pressure around the instep?",
+      "Was the heel hold secure?",
+      "Did your foot slide inside the shoe while walking?",
+      "Was there enough toe room?",
+      "Did the shoe feel comfortable after long wear?",
+      "Was it easy to adjust the laces?",
     ],
   },
   {
     id: "cushion",
-    title: "クッション性",
+    title: "Cushion",
     label: "Cushion",
     icon: Smile,
     color: "from-lime-300 to-green-500",
     accent: "bg-lime-100",
-    parameters: ["柔らかさ", "反発感", "衝撃吸収", "疲労軽減", "前足部クッション"],
+    parameters: ["Softness", "Rebound", "Impact Absorption", "Fatigue Reduction", "Forefoot Cushion"],
     questions: [
-      "着地時の柔らかさはどう感じましたか？",
-      "反発感は十分に感じられましたか？",
-      "クッション量は適切でしたか？",
-      "長時間使用時の疲労軽減を感じましたか？",
-      "前足部のクッション感はどうでしたか？",
-      "踵部の衝撃吸収は十分でしたか？",
+      "How did the softness feel during landing?",
+      "Did you feel enough rebound?",
+      "Was the amount of cushioning appropriate?",
+      "Did the shoe help reduce fatigue during long wear?",
+      "How did the forefoot cushioning feel?",
+      "Was the heel impact absorption sufficient?",
     ],
   },
   {
     id: "stability",
-    title: "安定性",
+    title: "Stability",
     label: "Stability",
     icon: Gauge,
     color: "from-orange-300 to-red-500",
     accent: "bg-orange-100",
-    parameters: ["横ブレ", "着地安定感", "足首サポート", "コーナリング", "ミッドソール剛性"],
+    parameters: ["Side-to-side Stability", "Landing Stability", "Ankle Support", "Cornering", "Midsole Rigidity"],
     questions: [
-      "横ブレは感じましたか？",
-      "着地時の安定感はどうでしたか？",
-      "コーナリング時に不安感はありましたか？",
-      "片足立ち時の安定感は十分でしたか？",
-      "ミッドソールの硬さは適切でしたか？",
-      "足首周りのサポート感はどうでしたか？",
+      "Did you feel any side-to-side wobbling?",
+      "How stable did the shoe feel during landing?",
+      "Did you feel unstable while cornering?",
+      "Was the shoe stable enough while standing on one foot?",
+      "Was the midsole firmness appropriate?",
+      "How was the support around the ankle?",
     ],
   },
   {
     id: "lightweight",
-    title: "軽量性",
+    title: "Lightweight",
     label: "Lightweight",
     icon: Zap,
     color: "from-yellow-300 to-amber-500",
     accent: "bg-yellow-100",
-    parameters: ["手持ち重量感", "歩行時重量感", "長時間負担", "動きやすさ"],
+    parameters: ["Hand Feel Weight", "Walking Weight Feel", "Long-wear Load", "Ease of Movement"],
     questions: [
-      "持った時に軽さを感じましたか？",
-      "歩行時に重さは気になりましたか？",
-      "長時間使用時の重量負担はありましたか？",
-      "動きやすさに影響はありましたか？",
+      "Did the shoe feel light when held?",
+      "Did the weight bother you while walking?",
+      "Did the weight feel burdensome during long wear?",
+      "Did the weight affect ease of movement?",
     ],
   },
   {
     id: "breathability",
-    title: "通気性",
+    title: "Breathability",
     label: "Breathability",
     icon: Wind,
     color: "from-sky-300 to-indigo-500",
     accent: "bg-sky-100",
-    parameters: ["ムレにくさ", "通気感", "夏場適性", "素材快適性"],
+    parameters: ["Ventilation", "Heat Build-up", "Summer Comfort", "Material Comfort"],
     questions: [
-      "ムレ感はありましたか？",
-      "通気性は十分に感じましたか？",
-      "夏場でも快適に履けそうですか？",
-      "素材の蒸れやすさは気になりましたか？",
+      "Did your feet feel hot or humid inside the shoe?",
+      "Did the shoe feel breathable enough?",
+      "Would this shoe be comfortable in summer?",
+      "Did the upper material feel prone to heat build-up?",
     ],
   },
   {
     id: "flexibility",
-    title: "屈曲性",
+    title: "Flexibility",
     label: "Flexibility",
     icon: RotateCcw,
     color: "from-violet-300 to-purple-500",
     accent: "bg-violet-100",
-    parameters: ["曲がりやすさ", "前足部屈曲", "動作時の硬さ", "重心移動"],
+    parameters: ["Bending Ease", "Forefoot Flex", "Stiffness", "Weight Transition"],
     questions: [
-      "歩行時の曲がりやすさはどうでしたか？",
-      "前足部の屈曲は自然でしたか？",
-      "動作時の硬さは気になりましたか？",
-      "スムーズな重心移動を感じましたか？",
+      "How easy was the shoe to bend while walking?",
+      "Was the forefoot flex natural?",
+      "Did the shoe feel stiff during movement?",
+      "Did the shoe support smooth weight transition?",
     ],
   },
   {
     id: "grip",
-    title: "グリップ性",
+    title: "Grip",
     label: "Grip",
     icon: Shield,
     color: "from-emerald-300 to-teal-500",
     accent: "bg-emerald-100",
-    parameters: ["滑りにくさ", "濡れ路面", "急停止", "接地感"],
+    parameters: ["Slip Resistance", "Wet Surface Grip", "Stopping Grip", "Ground Contact"],
     questions: [
-      "滑りやすさは感じましたか？",
-      "濡れた路面での安心感はありましたか？",
-      "急停止時のグリップ感はどうでしたか？",
-      "アウトソールの接地感は十分でしたか？",
+      "Did the shoe feel slippery?",
+      "Did the shoe feel secure on wet surfaces?",
+      "How was the grip during sudden stops?",
+      "Was the outsole ground contact sufficient?",
     ],
   },
   {
     id: "durability",
-    title: "耐久性",
+    title: "Durability",
     label: "Durability",
     icon: Shield,
     color: "from-slate-300 to-slate-600",
     accent: "bg-slate-100",
-    parameters: ["素材強度", "摩耗耐性", "長期使用感", "アッパー強度"],
+    parameters: ["Material Strength", "Abrasion Resistance", "Long-term Use", "Upper Strength"],
     questions: [
-      "素材の耐久性に不安はありましたか？",
-      "摩耗しやすそうな箇所はありましたか？",
-      "長期間使用できそうと感じましたか？",
-      "アッパー素材の強度は十分そうですか？",
+      "Did you have any concerns about material durability?",
+      "Were there any areas that seemed likely to wear quickly?",
+      "Did the shoe feel suitable for long-term use?",
+      "Did the upper material seem strong enough?",
     ],
   },
   {
     id: "easy",
-    title: "着脱性",
+    title: "Easy On/Off",
     label: "Easy On/Off",
     icon: Plus,
     color: "from-pink-300 to-rose-500",
     accent: "bg-pink-100",
-    parameters: ["履きやすさ", "脱ぎやすさ", "開口部", "着脱ストレス"],
+    parameters: ["Ease of Putting On", "Ease of Taking Off", "Opening Size", "Stress During On/Off"],
     questions: [
-      "履きやすさはどうでしたか？",
-      "脱ぎやすさはどうでしたか？",
-      "開口部の広さは適切でしたか？",
-      "着脱時にストレスはありましたか？",
+      "How easy was it to put on the shoe?",
+      "How easy was it to take off the shoe?",
+      "Was the opening size appropriate?",
+      "Did you feel any stress while putting on or taking off the shoe?",
     ],
   },
   {
     id: "design",
-    title: "デザイン",
+    title: "Design",
     label: "Design",
     icon: Star,
     color: "from-fuchsia-300 to-pink-500",
     accent: "bg-fuchsia-100",
-    parameters: ["第一印象", "シルエット", "高級感", "ブランドらしさ", "購入意欲"],
+    parameters: ["First Impression", "Silhouette", "Premium Feel", "Brand Identity", "Purchase Interest"],
     questions: [
-      "全体デザインの印象はどうでしたか？",
-      "シルエットは魅力的に感じましたか？",
-      "高級感は感じられましたか？",
-      "ブランドらしさは感じましたか？",
-      "他人に勧めたいデザインですか？",
-      "年齢層に合ったデザインだと思いますか？",
+      "What was your first impression of the overall design?",
+      "Did you find the silhouette attractive?",
+      "Did the shoe feel premium?",
+      "Did the design feel consistent with the brand?",
+      "Would you recommend this design to others?",
+      "Do you think the design fits the target age group?",
     ],
   },
   {
     id: "color",
-    title: "カラー",
+    title: "Color",
     label: "Color",
     icon: Palette,
     color: "from-rose-300 via-orange-300 to-yellow-400",
     accent: "bg-rose-100",
-    parameters: ["配色印象", "配色バランス", "合わせやすさ", "高級感", "店頭映え"],
+    parameters: ["Color Impression", "Color Balance", "Styling Versatility", "Premium Color Feel", "Shelf Impact"],
     questions: [
-      "カラーリングの印象はどうでしたか？",
-      "配色バランスは良いと感じましたか？",
-      "コーディネートしやすそうですか？",
-      "色の高級感は感じられましたか？",
-      "店頭で目を引く色だと思いますか？",
+      "What was your impression of the colorway?",
+      "Did the color balance feel good?",
+      "Does the color seem easy to style with outfits?",
+      "Did the color feel premium?",
+      "Would this color stand out in stores?",
     ],
   },
   {
     id: "scene",
-    title: "使用シーン",
+    title: "Usage Scene",
     label: "Usage Scene",
     icon: ClipboardList,
     color: "from-blue-300 to-cyan-500",
     accent: "bg-blue-100",
-    parameters: ["日常使用", "スポーツ適性", "通勤通学", "汎用性"],
+    parameters: ["Daily Use", "Sports Use", "Commuting", "Versatility"],
     questions: [
-      "日常使いしやすそうですか？",
-      "スポーツ用途に適していると感じますか？",
-      "通勤・通学でも使いやすそうですか？",
+      "Does the shoe seem easy to use daily?",
+      "Does the shoe feel suitable for sports use?",
+      "Would the shoe be suitable for commuting or school?",
     ],
   },
   {
     id: "overall",
-    title: "総合評価",
+    title: "Overall",
     label: "Overall",
     icon: Sparkles,
     color: "from-indigo-300 to-violet-500",
     accent: "bg-indigo-100",
-    parameters: ["総合満足度", "購入意向", "推奨意向", "改善優先度"],
+    parameters: ["Overall Satisfaction", "Purchase Intent", "Recommendation Intent", "Improvement Priority"],
     questions: [
-      "総合的な満足度を教えてください。",
-      "購入したいと思いましたか？",
-      "改善してほしい点はありますか？",
+      "What is your overall satisfaction with this sample?",
+      "Would you consider purchasing this shoe?",
+      "What points would you like to improve?",
     ],
   },
 ];
 
 const categories = ["Running", "Lifestyle", "Kids", "Work", "Training", "Outdoor"];
-const users = ["初級者", "中級者", "上級者", "社内評価者", "一般ユーザー"];
+const users = ["Beginner", "Intermediate", "Advanced", "Internal Tester", "General User"];
 
 export default function PopShoesHearingSheetMaker() {
   const [modelName, setModelName] = useState("Cloud Runner Proto 01");
   const [category, setCategory] = useState("Running");
-  const [targetUsers, setTargetUsers] = useState(["初級者", "一般ユーザー"]);
+  const [targetUsers, setTargetUsers] = useState(["Beginner", "General User"]);
   const [selected, setSelected] = useState(["fit", "cushion", "design", "color", "overall"]);
   const [generated, setGenerated] = useState(false);
   const [customQuestion, setCustomQuestion] = useState("");
@@ -265,7 +276,7 @@ export default function PopShoesHearingSheetMaker() {
     return !excludedQuestions.includes(getQuestionId(groupId, index));
   };
 
-  const getSelectedQuestions = (group: (typeof questionGroups)[number]) => {
+  const getSelectedQuestions = (group: QuestionGroup) => {
     return group.questions.filter((_, index) => isQuestionSelected(group.id, index));
   };
 
@@ -337,9 +348,10 @@ export default function PopShoesHearingSheetMaker() {
             y = 20;
           }
 
+          const questionLines = doc.splitTextToSize(`${index + 1}. ${q}`, 160);
           doc.setFontSize(10);
-          doc.text(`${index + 1}. ${q}`, 24, y);
-          y += 7;
+          doc.text(questionLines, 24, y);
+          y += questionLines.length * 6 + 2;
           doc.line(24, y, 185, y);
           y += 8;
         });
@@ -348,18 +360,30 @@ export default function PopShoesHearingSheetMaker() {
       }
     });
 
-    customQuestions.forEach((q, index) => {
-      if (y > 270) {
+    if (customQuestions.length > 0) {
+      if (y > 250) {
         doc.addPage();
         y = 20;
       }
 
-      doc.setFontSize(10);
-      doc.text(`Custom ${index + 1}. ${q}`, 20, y);
-      y += 7;
-      doc.line(20, y, 180, y);
-      y += 8;
-    });
+      doc.setFontSize(14);
+      doc.text("Custom Questions", 20, y);
+      y += 10;
+
+      customQuestions.forEach((q, index) => {
+        if (y > 270) {
+          doc.addPage();
+          y = 20;
+        }
+
+        const questionLines = doc.splitTextToSize(`Custom ${index + 1}. ${q}`, 160);
+        doc.setFontSize(10);
+        doc.text(questionLines, 24, y);
+        y += questionLines.length * 6 + 2;
+        doc.line(24, y, 185, y);
+        y += 8;
+      });
+    }
 
     doc.save("hearing-sheet.pdf");
   };
@@ -414,9 +438,9 @@ export default function PopShoesHearingSheetMaker() {
 
   const exportText = () => {
     const lines: string[] = [];
-    lines.push(`ヒアリングシート：${modelName || "未入力サンプル"}`);
-    lines.push(`カテゴリ：${category}`);
-    lines.push(`対象：${targetUsers.join(" / ") || "未選択"}`);
+    lines.push(`Hearing Sheet: ${modelName || "Untitled Sample"}`);
+    lines.push(`Category: ${category}`);
+    lines.push(`Target: ${targetUsers.join(" / ") || "Not selected"}`);
     lines.push("");
 
     selectedGroups.forEach((group) => {
@@ -426,20 +450,20 @@ export default function PopShoesHearingSheetMaker() {
       lines.push(`■ ${group.title}`);
 
       if (group.parameters.length > 0) {
-        lines.push("[評価パラメーター]");
+        lines.push("[Rating Parameters]");
         group.parameters.forEach((parameter) => lines.push(`${parameter}: 1 2 3 4 5`));
         lines.push("");
       }
 
       if (questions.length > 0) {
-        lines.push("[質問]");
+        lines.push("[Questions]");
         questions.forEach((q, index) => lines.push(`${index + 1}. ${q}`));
         lines.push("");
       }
     });
 
     if (customQuestions.length > 0) {
-      lines.push("■ 今回だけの追加質問");
+      lines.push("■ Custom Questions");
       customQuestions.forEach((q, index) => lines.push(`${index + 1}. ${q}`));
     }
 
@@ -463,7 +487,7 @@ export default function PopShoesHearingSheetMaker() {
                 HEARING SHEET MAKER
               </h1>
               <p className="mt-2 text-base font-semibold text-slate-600 md:text-lg">
-                評価軸・質問・評価パラメーターを選んでシートを生成！
+                Select evaluation areas, rating parameters, and questions for each shoe sample.
               </p>
             </div>
             <motion.div
@@ -489,15 +513,15 @@ export default function PopShoesHearingSheetMaker() {
                   <h2 className="text-xl font-black">Sample Info</h2>
                 </div>
 
-                <label className="mb-2 block text-sm font-black">モデル名</label>
+                <label className="mb-2 block text-sm font-black">Model Name</label>
                 <input
                   value={modelName}
                   onChange={(e) => setModelName(e.target.value)}
                   className="mb-4 w-full rounded-2xl border-3 border-slate-900 bg-slate-50 px-4 py-3 font-bold outline-none transition focus:bg-white focus:ring-4 focus:ring-cyan-200"
-                  placeholder="例：Cloud Runner Proto 01"
+                  placeholder="Example: Cloud Runner Proto 01"
                 />
 
-                <label className="mb-2 block text-sm font-black">カテゴリ</label>
+                <label className="mb-2 block text-sm font-black">Category</label>
                 <div className="mb-4 grid grid-cols-2 gap-2">
                   {categories.map((item) => (
                     <button
@@ -514,7 +538,7 @@ export default function PopShoesHearingSheetMaker() {
                   ))}
                 </div>
 
-                <label className="mb-2 block text-sm font-black">対象ユーザー</label>
+                <label className="mb-2 block text-sm font-black">Target User</label>
                 <div className="flex flex-wrap gap-2">
                   {users.map((user) => (
                     <button
@@ -538,8 +562,10 @@ export default function PopShoesHearingSheetMaker() {
               <CardContent className="p-5">
                 <div className="mb-4 flex items-center justify-between gap-2">
                   <div>
-                    <h2 className="text-xl font-black">どこを聞く？</h2>
-                    <p className="text-sm font-bold text-slate-500">カードで評価軸をON/OFF</p>
+                    <h2 className="text-xl font-black">Evaluation Areas</h2>
+                    <p className="text-sm font-bold text-slate-500">
+                      Toggle categories ON/OFF
+                    </p>
                   </div>
                   <Button
                     onClick={reset}
@@ -602,7 +628,7 @@ export default function PopShoesHearingSheetMaker() {
                   <div>
                     <h2 className="text-2xl font-black">Live Preview</h2>
                     <p className="font-bold text-slate-500">
-                      質問をクリックでON/OFF。評価パラメーターもPDFに入ります。
+                      Click questions to include or exclude them from the sheet.
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -629,14 +655,14 @@ export default function PopShoesHearingSheetMaker() {
 
                 <div className="mb-5 rounded-3xl border-4 border-dashed border-slate-900 bg-gradient-to-r from-yellow-100 via-pink-100 to-cyan-100 p-4">
                   <div className="text-sm font-black text-slate-500">SAMPLE</div>
-                  <div className="text-2xl font-black">{modelName || "未入力サンプル"}</div>
+                  <div className="text-2xl font-black">{modelName || "Untitled Sample"}</div>
                   <div className="mt-2 flex flex-wrap gap-2 text-sm font-black">
                     <span className="rounded-full bg-white px-3 py-1">Category: {category}</span>
                     <span className="rounded-full bg-white px-3 py-1">
-                      Target: {targetUsers.join(" / ") || "未選択"}
+                      Target: {targetUsers.join(" / ") || "Not selected"}
                     </span>
                     <span className="rounded-full bg-white px-3 py-1">
-                      Total: {questionCount}問
+                      Total: {questionCount}
                     </span>
                     <span className="rounded-full bg-white px-3 py-1">
                       Parameters: {parameterCount}
@@ -645,14 +671,14 @@ export default function PopShoesHearingSheetMaker() {
                 </div>
 
                 <div className="mb-5 rounded-3xl border-3 border-slate-900 bg-slate-50 p-4">
-                  <label className="mb-2 block text-sm font-black">今回だけの追加質問</label>
+                  <label className="mb-2 block text-sm font-black">Custom Question</label>
                   <div className="flex gap-2">
                     <input
                       value={customQuestion}
                       onChange={(e) => setCustomQuestion(e.target.value)}
                       onKeyDown={(e) => e.key === "Enter" && addCustomQuestion()}
                       className="min-w-0 flex-1 rounded-2xl border-3 border-slate-900 bg-white px-4 py-3 font-bold outline-none focus:ring-4 focus:ring-pink-200"
-                      placeholder="例：新しいソール形状について違和感はありますか？"
+                      placeholder="Example: Did you notice anything unusual about the new sole shape?"
                     />
                     <Button
                       onClick={addCustomQuestion}
@@ -672,7 +698,7 @@ export default function PopShoesHearingSheetMaker() {
                       className="mb-5 rounded-3xl border-4 border-slate-900 bg-lime-200 p-4 text-center shadow-[4px_4px_0_#111827]"
                     >
                       <div className="text-2xl font-black">
-                        🎉 Generated! {questionCount}問・{parameterCount}評価項目のシートができました
+                        🎉 Generated! {questionCount} questions and {parameterCount} rating parameters selected.
                       </div>
                     </motion.div>
                   )}
@@ -683,7 +709,7 @@ export default function PopShoesHearingSheetMaker() {
                     <div className="rounded-3xl border-4 border-dashed border-slate-300 p-10 text-center">
                       <div className="text-5xl">👟</div>
                       <p className="mt-3 text-xl font-black text-slate-500">
-                        左のカードを選ぶと質問が表示されます
+                        Select categories on the left to preview questions.
                       </p>
                     </div>
                   ) : (
@@ -726,7 +752,7 @@ export default function PopShoesHearingSheetMaker() {
 
                           <div className="mb-3 grid gap-2 rounded-2xl bg-slate-50 p-3">
                             <div className="text-sm font-black text-slate-500">
-                              評価パラメーター（5段階）
+                              Rating Parameters (1–5)
                             </div>
                             <div className="flex flex-wrap gap-2">
                               {group.parameters.map((parameter) => (
@@ -783,7 +809,7 @@ export default function PopShoesHearingSheetMaker() {
                       className="rounded-3xl border-4 border-slate-900 bg-white p-4 shadow-[4px_4px_0_#111827]"
                     >
                       <div className="mb-3 inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-yellow-300 to-pink-300 px-4 py-2 font-black">
-                        <Plus size={20} /> 今回だけの追加質問
+                        <Plus size={20} /> Custom Questions
                       </div>
                       <ol className="space-y-2">
                         {customQuestions.map((question, index) => (
