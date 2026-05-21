@@ -282,7 +282,7 @@ const exportPDF = () => {
 
   doc.save("hearing-sheet.pdf");
 };
-  const toggleGroup = (id) => {
+  const toggleGroup = (id: string) => {
     setGenerated(false);
     setSelected((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
